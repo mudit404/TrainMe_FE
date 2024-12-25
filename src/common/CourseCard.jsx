@@ -7,8 +7,8 @@ function CourseCard({ course, type }) {
     <Link
       to={
         type === "user"
-          ? `/user/courses/${course._id}`
-          : `/admin/courses/${course._id}`
+          ? `/user/courses/${course.id}`
+          : `/admin/courses/${course.id}`
       }
     >
       <article className="border border-royal-green-600 rounded-md h-full">

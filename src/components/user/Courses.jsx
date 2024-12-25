@@ -23,7 +23,7 @@ function Courses() {
       {courses.length !== 0 ? (
         <div className="mt-8 grid md:grid-cols-3 gap-8">
           {courses.map((course) => (
-            <Course key={course._id} course={course} type={"user"} />
+            <Course key={course.id} course={course} type={"user"} />
           ))}
         </div>
       ) : (

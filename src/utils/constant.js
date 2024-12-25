@@ -1,14 +1,17 @@
 // const ROOT_URL = "https://coursex.onrender.com/";
-const ROOT_URL = "http://127.0.0.1:8000/api/";
+// const ROOT_URL = "http://127.0.0.1:8000/api/";
+const ROOT_URL = "https://trainme-be.onrender.com/api/";
 
 // Admin Routes
 
 const ADMIN_SIGNUP_URL = ROOT_URL + "admin/signup";
-const ADMIN_LOGIN_URL = ROOT_URL + "api/token";
+const ADMIN_LOGIN_URL = ROOT_URL + "token/";
 const ADMIN_COURSES_URL = ROOT_URL + "admin/courses";
 
 // User Routes
-const USER_COURSE_URL = ROOT_URL + "users/courses";
+// const USER_COURSE_URL = ROOT_URL + "users/courses";
+const USER_COURSE_URL = ROOT_URL + "courses/";
+const COURSE_BY_ID = ROOT_URL + "courses/";
 const USER_PURCHASED_URL = ROOT_URL + "users/purchasedcourses";
 // const USER_LOGIN_URL = ROOT_URL + "users/login/";
 const USER_LOGIN_URL = ROOT_URL + "auth/login/";
@@ -27,6 +30,7 @@ export {
   ADMIN_SIGNUP_URL,
   ADMIN_COURSES_URL,
   ALL_COURSES,
+  COURSE_BY_ID,
 };
 
 // Bearer Token for admin 

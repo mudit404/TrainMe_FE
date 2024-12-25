@@ -26,7 +26,7 @@ function Login() {
           setUsername("");
           setPassword("");
           setAdmin(username);
-          localStorage.setItem("token", res.data.token);
+          localStorage.setItem("token", res.data.access_token);
           setAdminToken(res.data.token);
         })
         .catch((err) => setMessage("Username or password must be correct"));

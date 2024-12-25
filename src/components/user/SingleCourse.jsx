@@ -5,6 +5,10 @@ import { useRecoilValue } from "recoil";
 import { userAtom } from "../../store/atom";
 import jwt_decode from "jwt-decode";
 import { USER_COURSE_URL } from "../../utils/constant";
+import {COURSE_BY_ID} from "../../utils/constant"; 
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe('pk_test_51QZWEkKlXzYwUHy1A9VTVvQPQNb0aQdgfDrvAXuLAyvf6JJbyOvKiYUjS7W3dHoH86SbZDkB01vQpJJIYHejueqt00RyXSO2fF');
 
 function SingleCourse() {
   const [course, setCourse] = useState({});
@@ -15,38 +19,65 @@ function SingleCourse() {
 
   useEffect(() => {
     axios
-      .get(USER_COURSE_URL)
+      .get(`${COURSE_BY_ID}${id}`)
       .then((res) =>
-        setCourse(res.data.courses.find((course) => course._id === id))
+        // setCourse(res.data.courses.find((course) => course.id === id))
+        setCourse(res.data.course)
       )
       .catch((err) => console.error(err));
   }, []);
 
-  const handleClick = () => {
-    if (token) {
-      if (jwt_decode(token).role === "user") {
-        axios
-          .post(`${USER_COURSE_URL}/${id}`, null, {
-            headers: {
-              authorization: token,
-            },
-          })
-          .then((res) => setMessage(res.data.message))
-          .catch((err) => console.error(err));
-      } else {
-        setMessage("You are not authenticated to buy any course");
+  // const handleClick = () => {
+  //   if (token) {
+  //     if (jwt_decode(token).role === "user") {
+  //       axios
+  //         .post(`${USER_COURSE_URL}/${id}`, null, {
+  //           headers: {
+  //             authorization: token,
+  //           },
+  //         })
+  //         .then((res) => setMessage(res.data.message))
+  //         .catch((err) => console.error(err));
+  //     } else {
+  //       setMessage("You are not authenticated to buy any course");
+  //     }
+  //   } else {
+  //     setMessage("You are not authenticated to buy any course");
+  //   }
+  // };
+
+  const handleBuyCourse = async () => {
+    try {
+      // Get the user ID (from the authenticated user, typically from JWT)
+      const userId = 'your_user_id';  // Replace with actual user ID from context or JWT
+
+      // Create a checkout session in the backend
+      const { data } = await axios.post('http://127.0.0.1:8000/api/create-checkout-session/', {
+        course_id: id,
+      });
+
+      // Redirect to Stripe Checkout
+      const stripe = await stripePromise;
+      const { error } = await stripe.redirectToCheckout({
+        sessionId: data.id,  // Session ID from backend
+      });
+
+      if (error) {
+        console.error('Error redirecting to Stripe:', error);
       }
-    } else {
-      setMessage("You are not authenticated to buy any course");
-    }
+    } catch (error) {
+      console.error('Error initiating payment:', error);
+    } 
   };
+
+  console.log(course);
 
   return (
     <section>
       <header
         className="py-24 bg-cover bg-center"
         style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${course.imgLink})`,
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${course.image_url})`,
         }}
       >
         <div className="container mx-auto px-6 text-center">
@@ -83,7 +114,7 @@ function SingleCourse() {
           )}
           <footer className="mt-4">
             <button
-              onClick={handleClick}
+              onClick={handleBuyCourse}
               className="btn mt-4 !border-white !text-white inline-block"
             >
               Buy Course
