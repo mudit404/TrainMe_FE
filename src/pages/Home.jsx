@@ -255,11 +255,6 @@ function Home() {
           </div>
         </div>
       </footer>
-      <div className="bg-gray-800">
-        <div className="container mx-auto py-4 px-8 text-white text-center">
-          Made by Yash Raj Singh with ❤️
-        </div>
-      </div>
     </>
   );
 }
